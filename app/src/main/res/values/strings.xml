@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Stores</string>
+    <string name="imagePhoto_description">Store Image</string>
+    <string name="description_fab">Add store</string>
 </resources>
