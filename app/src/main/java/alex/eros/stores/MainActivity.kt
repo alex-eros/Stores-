@@ -3,6 +3,8 @@ import alex.eros.stores.databinding.ActivityMainBinding
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 
 class MainActivity : AppCompatActivity(), OnClickListener {
@@ -28,7 +30,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             * congele por cierto tiempo*/
             Thread{
                 StoreApplication.databse.StoreDao().addStore(store)
-            }
+            }.start()
             mAdapter.add(store)
         }
 
@@ -39,6 +41,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         mAdapter = StoreAdapter(mutableListOf(),this)
         /*Inicializamos el GridLayputManager*/
         mGridlayout = GridLayoutManager(this,2)
+        getStores()
 
         binding.RVStore.apply {
             setHasFixedSize(true)
@@ -49,9 +52,38 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         }
     }
 
+     private fun getStores(){
+        doAsync{
+            /*Consulta a la base de datos en un hilo alterno*/
+            val stores = StoreApplication.databse.StoreDao().getAllStores()
+            uiThread {
+                /*Agregando el arrya obtenido en la consulta al hilo principal*/
+                mAdapter.setStores(stores)
+            }
+        }
+    }
+
     override fun Onclick(store:Store) {
 
-
-
     }
+
+    override fun OnFavoriteStore(store: Store) {
+         store.isFavorite = !store.isFavorite
+         doAsync {
+             StoreApplication.databse.StoreDao().updateStores(store)
+             uiThread {
+                 mAdapter.update(store)
+             }
+         }
+    }
+
+    override fun OnDeleteStore(store: Store) {
+        doAsync {
+            StoreApplication.databse.StoreDao().deleteStore(store)
+            uiThread {
+                mAdapter.delete(store)
+            }
+        }
+    }
+    
 }

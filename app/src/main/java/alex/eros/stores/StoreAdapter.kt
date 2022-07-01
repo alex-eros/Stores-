@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class StoreAdapter (private val stores:MutableList<Store>,private var listener:OnClickListener) :
+class StoreAdapter (private var stores:MutableList<Store>,private var listener:OnClickListener) :
     RecyclerView.Adapter<StoreAdapter.StoreHolder>() {
 
     private lateinit var mContext: Context
@@ -16,7 +16,15 @@ class StoreAdapter (private val stores:MutableList<Store>,private var listener:O
        var binding = ItemStoresBinding.bind(view)
 
        fun setListener(store:Store){
-           binding.root.setOnClickListener{listener.Onclick(store)}
+           with(binding.root){
+               setOnClickListener{listener.Onclick(store)}
+               setOnLongClickListener {
+                   listener.OnDeleteStore(store)
+               true}
+           }
+           binding.CheckBoxFavorite.setOnClickListener {
+               listener.OnFavoriteStore(store)
+           }
        }
     }
 
@@ -33,18 +41,43 @@ class StoreAdapter (private val stores:MutableList<Store>,private var listener:O
 
         with(holder){
             binding.TVName.text = store.storeName
+            binding.CheckBoxFavorite.isChecked = store.isFavorite
             setListener(store)
         }
     }
 
     override fun getItemCount(): Int = stores.size
+    /*Este metodo define el tamño de la lista en patalla, esto es el tamño de la lista que se le pasa
+    a la clase que hace de adaptador*/
+
 
 
     fun add(store: Store) {
         stores.add(store)
         notifyDataSetChanged()
     }
-    /*Este metodo define el tamño de la lista en patalla, esto es el tamño de la lista que se le pasa
-    a la clase que hace de adaptador*/
+
+    fun setStores(stores: MutableList<Store>) {
+        /*Metodo que setea el RV en el inicio de la aplicaion mediante una consulta a la base de
+        * datos*/
+        this.stores = stores
+        notifyDataSetChanged()
+    }
+
+    fun update(store: Store) {
+        val index = stores.indexOf(store)
+        if (index != -1){
+            stores.set(index,store)
+            notifyItemChanged(index)
+        }
+    }
+
+    fun delete(store: Store) {
+        val index = stores.indexOf(store)
+        if (index != -1){
+            stores.removeAt(index)
+            notifyItemRemoved(index)
+        }
+    }
 
 }
