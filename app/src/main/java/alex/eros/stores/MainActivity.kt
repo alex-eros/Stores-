@@ -22,6 +22,13 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
         binding.ButtonSave.setOnClickListener{
             val store = Store(storeName = binding.ETStoreName.text.toString().trim())
+
+            /*Los procesos que se hagan con las bases de datos es necesario realizarlos
+            * en hilos paralelos al principal por que podrían provocar que la aplicacion se
+            * congele por cierto tiempo*/
+            Thread{
+                StoreApplication.databse.StoreDao().addStore(store)
+            }
             mAdapter.add(store)
         }
 
@@ -44,7 +51,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
     override fun Onclick(store:Store) {
 
-        
+
 
     }
 }

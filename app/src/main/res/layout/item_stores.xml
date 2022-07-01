@@ -45,7 +45,8 @@
             android:id="@+id/CheckBoxFavorite"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:button="@drawable/ic_favorite_border"
+            android:button="@drawable/states_cb_favorite"
+            android:buttonTint="@color/white"
             android:checked="false"
 
             />

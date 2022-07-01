@@ -1,6 +1,9 @@
 package alex.eros.stores
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-data class Store(var storeName:String = "",
+@Entity(tableName= "StoreEntity")
+data class Store(@PrimaryKey (autoGenerate = true) var storeName:String = "",
                  var id:Long = 0,
                  var phone:String = "",
                  var webSite:String = "",
