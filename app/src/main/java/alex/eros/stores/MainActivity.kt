@@ -7,7 +7,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 
-class MainActivity : AppCompatActivity(), OnClickListener {
+class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var mAdapter:StoreAdapter
@@ -22,18 +22,36 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
         setRecyclerView()
 
-        binding.ButtonSave.setOnClickListener{
-            val store = Store(storeName = binding.ETStoreName.text.toString().trim())
+//        binding.ButtonSave.setOnClickListener{
+//            val store = Store(storeName = binding.ETStoreName.text.toString().trim())
+//
+//            /*Los procesos que se hagan con las bases de datos es necesario realizarlos
+//            * en hilos paralelos al principal por que podrían provocar que la aplicacion se
+//            * congele por cierto tiempo*/
+//            Thread{
+//                StoreApplication.databse.StoreDao().addStore(store)
+//            }.start()
+//            mAdapter.add(store)
+//        }
 
-            /*Los procesos que se hagan con las bases de datos es necesario realizarlos
-            * en hilos paralelos al principal por que podrían provocar que la aplicacion se
-            * congele por cierto tiempo*/
-            Thread{
-                StoreApplication.databse.StoreDao().addStore(store)
-            }.start()
-            mAdapter.add(store)
+        binding.fabAdd.setOnClickListener {
+            launchEditFragment()
         }
 
+    }
+
+    private fun launchEditFragment() {
+        val fragment = EditStoreFragment()
+
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+
+        fragmentTransaction.add(R.id.ContainerMain, fragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+
+        //binding.fabAdd.hide()
+        fabState()
     }
 
     private fun setRecyclerView() {
@@ -85,5 +103,21 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             }
         }
     }
-    
+
+    /*MainAux*/
+    override fun fabState(isVisible: Boolean) {
+        if (isVisible == true){
+            binding.fabAdd.show()
+        }else{
+            binding.fabAdd.hide()
+        }
+    }
+
+    override fun addStore(store: Store) {
+       mAdapter.add(store)
+    }
+
+    override fun updateStore(store: Store) {
+
+    }
 }

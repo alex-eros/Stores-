@@ -3,4 +3,5 @@
     <dimen name="cardView_height">200dp</dimen>
     <dimen name="common_min_margin">8dp</dimen>
     <dimen name="default_padding">16dp</dimen>
+    <dimen name="image_store_preview">88dp</dimen>
 </resources>

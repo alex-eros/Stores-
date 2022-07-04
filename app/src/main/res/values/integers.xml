@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="et_store_name_maxlenght">50</integer>
+    <integer name="et_store_phone_maxlenght">13</integer>
+    <integer name="et_maxlines">2</integer>
+    <integer name="et_lines">2</integer>
+    <integer name="et_image_preview_lines">4</integer>
+</resources>

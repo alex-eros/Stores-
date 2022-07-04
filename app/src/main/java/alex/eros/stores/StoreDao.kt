@@ -8,7 +8,7 @@ interface StoreDao {
     fun getAllStores():MutableList<Store>
 
     @Insert
-    fun addStore(store:Store)
+    fun addStore(store:Store):Long
 
     @Update
     fun updateStores(store:Store)
