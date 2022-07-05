@@ -5,8 +5,11 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import com.google.android.material.snackbar.Snackbar
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
@@ -25,11 +28,27 @@ class EditStoreFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val id = arguments?.getLong(getString(R.string.arg_id_key),0)
+        if(id != null && id != 0L){
+            val idString = id.toString()
+            Toast.makeText(activityMain,idString,Toast.LENGTH_SHORT).show()
+        }else{
+            Toast.makeText(activityMain,id.toString(),Toast.LENGTH_SHORT).show()
+        }
+
         activityMain = activity as? MainActivity
         activityMain?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activityMain?.supportActionBar?.title = getString(R.string.edti_fragment_tittle)
 
         setHasOptionsMenu(true)
+
+        binding.imageUrl.addTextChangedListener {
+            Glide.with(this)
+                .load(binding.imageUrl.text.toString())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop()
+                .into(binding.ImagePhoto)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -47,17 +66,19 @@ class EditStoreFragment : Fragment() {
             R.id.action ->{
                 val store = Store(storeName = binding.EDStoreName.text.toString().trim(),
                 phone = binding.EDStorePhone.text.toString().trim(),
-                webSite = binding.EDStoreWebsite.text.toString().trim())
+                webSite = binding.EDStoreWebsite.text.toString().trim(),
+                photoUrl = binding.imageUrl.text.toString().trim())
 
                 doAsync {
                     store.id = StoreApplication.databse.StoreDao().addStore(store)
                     uiThread {
                         activityMain?.addStore(store)
                         hideKeyboard()
-                        Snackbar.make(binding.root,
-                            "Store succesfully added",
-                            Snackbar.LENGTH_SHORT)
-                            .show()
+//                        Snackbar.make(binding.root,
+//                            "Store succesfully added",
+//                            Snackbar.LENGTH_SHORT)
+//                            .show()
+                        Toast.makeText(activityMain,getString(R.string.store_succes_add),Toast.LENGTH_SHORT).show()
                         activityMain?.onBackPressed()
                     }
                 }

@@ -11,4 +11,6 @@
     <string name="ED_hint_store_image_preview">Store Image Url</string>
     <string name="edti_fragment_tittle">Enter a Store</string>
     <string name="menu_save">Save</string>
+    <string name="store_succes_add">Store Succesfuly Added</string>
+    <string name="arg_id_key">"key value "</string>
 </resources>

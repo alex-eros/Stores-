@@ -95,15 +95,16 @@
                 app:counterEnabled="false"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 >
+
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/ED_Store_Image_Preview"
+                    android:id="@+id/image_url"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
                     android:maxLines="@integer/et_image_preview_lines"
                     android:minLines="@integer/et_image_preview_lines"
                     android:textAppearance="?attr/textAppearanceCaption"
-                    android:textColor="@color/color_link"
-                    android:inputType="textMultiLine"/>
+                    android:textColor="@color/color_link" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView

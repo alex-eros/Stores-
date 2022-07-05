@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 class StoreAdapter (private var stores:MutableList<Store>,private var listener:OnClickListener) :
     RecyclerView.Adapter<StoreAdapter.StoreHolder>() {
@@ -17,7 +19,7 @@ class StoreAdapter (private var stores:MutableList<Store>,private var listener:O
 
        fun setListener(store:Store){
            with(binding.root){
-               setOnClickListener{listener.Onclick(store)}
+               setOnClickListener{listener.Onclick(store.id)}
                setOnLongClickListener {
                    listener.OnDeleteStore(store)
                true}
@@ -42,6 +44,13 @@ class StoreAdapter (private var stores:MutableList<Store>,private var listener:O
         with(holder){
             binding.TVName.text = store.storeName
             binding.CheckBoxFavorite.isChecked = store.isFavorite
+
+            Glide.with(mContext)
+                .load(store.photoUrl)
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(binding.ImagePhoto)
+
             setListener(store)
         }
     }
